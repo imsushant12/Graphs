@@ -1,0 +1,73 @@
+//by Sushant Gaurav
+
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+
+int a[10][10];
+void createGraph(int i , int j)
+{
+    a[i][j] = 1;
+    a[j][i] = 1;
+}
+
+
+int main()
+{
+    int choice,E,V,e1,e2,i,j;
+    cout<<"\nEnter the number of vertex : ";
+    cin>>V;
+
+    for(i=1 ; i<=V ; i++)
+    {
+        for(j=1 ; j<=V ; j++)
+            a[i][j]=0;
+    }
+
+    while(1)
+    {
+        cout<<"\n1. Create Graph"<<endl;
+        cout<<"2. To view array-matrix"<<endl;
+        cout<<"3. EXIT"<<endl;
+        cout<<"Enter your choice"<<endl;
+        cin>>choice;
+        switch(choice)
+        {
+        case 1:
+            {
+                for(i=1 ; i<=V ; i++)
+                {
+                    while(1)
+                    {
+                        cout<<"Enter the edges from '"<<i<<"' or press -1 : ";
+                        cin>>e2;
+                        if(e2 == -1)
+                            break;
+                        createGraph(i , e2);
+                    }
+                }
+                break;
+            }
+
+        case 2:
+            {
+                cout<<"Array  matrix of the graph is :"<<endl;
+                for(i=1 ; i<=V ; i++)
+                {
+                    for(j=1 ; j<=V ; j++)
+                        cout<<a[i][j]<<"   ";
+                    cout<<endl;
+                }
+                break;
+            }
+
+        case 3:
+            exit(0);
+            break;
+
+        default:
+            cout<<"\nINVALID CHOICE..."<<endl;
+        }
+    }
+    return 0;
+}
