@@ -221,6 +221,30 @@ void Kruskal(int s , int V)
     cout<<"Minimum cost = "<<mincost<<endl;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------
+
+bool isCyclic(int s , int V)
+{
+    if(visited[s] == 1)
+        return true;
+    bool FLAG = false;
+
+    if(visited[s] == 0)
+    {
+        visited[s]=1;
+        for(int i=1 ; i<=V ; i++)
+        {
+            if(a[s][i] == 1 && (!visited[i]))
+            {
+                FLAG = isCyclic(i , V);
+                if(FLAG == true)
+                    return true;
+            }
+        }
+    }
+    return FLAG;
+}
+
 
 int main()
 {
@@ -244,7 +268,8 @@ int main()
         cout<<"6. Single Source Shortest Path(Bellman Ford)"<<endl;
         cout<<"7. Minimum Spanning Tree - Prims Algorithm"<<endl;
         cout<<"8. Minimum Spanning Tree - Kruskal's Algorithm"<<endl;
-        cout<<"9. EXIT"<<endl;
+        cout<<"9. To detect cycle in the graph"<<endl;
+        cout<<"10. EXIT"<<endl;
         cout<<"Enter your choice"<<endl;
         cin>>choice;
         switch(choice)
@@ -326,6 +351,16 @@ int main()
             }
 
         case 9:
+            {
+                if(isCyclic(1 , V))
+                    cout<<"\nCycle is present"<<endl;
+                else
+                    cout<<"\nCycle is not present"<<endl;
+                visited[100] = {0};
+                break;
+            }
+
+        case 10:
             exit(0);
             break;
 
