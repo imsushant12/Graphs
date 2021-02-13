@@ -6,10 +6,7 @@
 #include <stack>
 using namespace std;
 
-int visited_b[100] = {0};        //for BFS
-int visited_d[100] = {0};        //for BFS
 int visited[100] = {0};
-int visited_t[100] ={0};         //for topology
 int indegree[100] = {0};         //for topology
 int a[10][10];
 stack <int> stk;
@@ -24,10 +21,10 @@ void createGraph(int i , int j , int weight)
 
 void DFS_recursive(int s , int V)
 {
-    if(visited_d[s] == 0)
+    if(visited[s] == 0)
     {
         cout<<s<<"  ";
-        visited_d[s] = 1;
+        visited[s] = 1;
         for(int i=1 ; i<=V ; i++)
         {
             if(a[s][i] != 0)            //means if there is an edge between s and i
@@ -42,7 +39,7 @@ void BFS(int s , int V)
 {
     queue <int> q;
     cout<<s<<"   ";
-    visited_b[s]=1;
+    visited[s]=1;
     q.push(s);
 
     while( !q.empty() )
@@ -51,10 +48,10 @@ void BFS(int s , int V)
         q.pop();
         for(int i=1 ; i<=V ; i++)
         {
-            if((a[node][i] != 0) && (visited_b[i] == 0))
+            if((a[node][i] != 0) && (visited[i] == 0))
             {
                 cout<<i<<"  ";
-                visited_b[i] = 1;
+                visited[i] = 1;
                 q.push(i);
             }
         }
@@ -97,9 +94,9 @@ void topology(int v)
 
 void dfs_topology(int v , int s)
 {
-    visited_t[s]=1;
+    visited[s]=1;
     for(int i=1 ; i<=v ; i++)
-        if(!visited_t[i])
+        if(!visited[i])
             dfs_topology(v , i);
     stk.push(s);
 }
@@ -272,6 +269,60 @@ void Kruskal(int s , int V)
     cout<<"Minimum cost = "<<mincost<<endl;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------
+
+bool isCyclic(int s , int V)
+{
+    if(visited[s] == 1)
+        return true;
+    bool FLAG = false;
+
+    if(visited[s] == 0)
+    {
+        visited[s]=1;
+        for(int i=1 ; i<=V ; i++)
+        {
+            if(a[s][i] == 1 && (!visited[i]))
+            {
+                FLAG = isCyclic(i , V);
+                if(FLAG == true)
+                    return true;
+            }
+        }
+    }
+    return FLAG;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+
+/*
+void printHamiltonian(int v , vector<int> &path , int N)
+{
+    if (path.size() == N)
+    {
+        for (int i : path)
+			cout << i << " ";
+		cout << endl;
+
+		return;
+    }
+
+    for (int w=1 ; w<=N ; w++)
+    {
+        if (!visited[w])
+        {
+            if(a[v][w] != 0)
+            {
+                visited[w] = 1;
+                path.push_back(w);
+                printHamiltonian(w , path , N);
+                visited[w] = 0;
+                path.pop_back();
+            }
+        }
+    }
+}
+*/
 
 
 
@@ -299,7 +350,8 @@ int main()
         cout<<"8. Single Source Shortest Path(Dijkstra)"<<endl;
         cout<<"9. Minimum Spanning Tree - Prims Algorithm"<<endl;
         cout<<"10. Minimum Spanning Tree - Kruskal Algorithm"<<endl;
-        cout<<"11. EXIT"<<endl;
+        cout<<"11. To detect cycle in the graph"<<endl;
+        cout<<"12. EXIT"<<endl;
         cout<<"Enter your choice"<<endl;
         cin>>choice;
         switch(choice)
@@ -318,6 +370,7 @@ int main()
                         cin>>weight;
                         createGraph(i , e2 , weight);
                     }
+                
                 }
                 break;
             }
@@ -340,8 +393,9 @@ int main()
                 for (int i=1 ; i<=V ; i++)
                 {
                     DFS_recursive(i , V);
-                    visited_d[i] = 0;
+                    visited[i] = 0;
                 }
+                visited[100] = {0};
                 break;
             }
 
@@ -349,12 +403,14 @@ int main()
             {
                 cout<<"Graph Traversal is : ";
                 BFS(1 , V);
+                visited[100] = {0};
                 break;
             }
 
         case 5:
             {
                 topology(V);
+                visited[100] = {0};
                 break;
             }
 
@@ -366,24 +422,28 @@ int main()
                     cout<<stk.top()<<"  ";
                     stk.pop();
                 }
+                visited[100] = {0};
                 break;
             }
 
         case 7:
             {
                 Dijkrasta(1 , V);
+                visited[100] = {0};
                 break;
             }
 
         case 8:
             {
                 BellmanFord(1 , V);
+                visited[100] = {0};
                 break;
             }
 
         case 9:
             {
                 Prim(1 , V);
+                visited[100] = {0};
                 break;
             }
 
@@ -402,6 +462,16 @@ int main()
             }
 
         case 11:
+            {
+                if(isCyclic(1 , V))
+                    cout<<"\nCycle is present"<<endl;
+                else
+                    cout<<"\nCycle is not present"<<endl;
+                visited[100] = {0};
+                break;
+            }
+
+        case 12:
             exit(0);
             break;
 
