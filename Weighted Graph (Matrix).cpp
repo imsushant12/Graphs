@@ -224,16 +224,6 @@ int main()
                         createGraph(i , e2 , weight);
                     }
                 }
-
-                    //For testing :
-                    //createGraph(1,2,4);
-                    //createGraph(1,3,8);
-                    //createGraph(2,3,2);
-                    //createGraph(2,4,5);
-                    //createGraph(3,4,5);
-                    //createGraph(3,5,9);
-                    //createGraph(4,5,4);
-
                 break;
             }
 
